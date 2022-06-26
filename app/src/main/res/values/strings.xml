@@ -1,0 +1,10 @@
+<resources>
+	<string name="app_name">DoggoBreed</string>
+	<string name="extend">Extend</string>
+	<string name="collapse">Collapse</string>
+	<string name="pet">Pet</string>
+	<string name="back_online">Back Online!</string>
+	<string name="no_internet">No Internet Connection!</string>
+	<string name="connectivity">Connectivity Icon</string>
+	<string name="dog">Dog</string>
+</resources>
