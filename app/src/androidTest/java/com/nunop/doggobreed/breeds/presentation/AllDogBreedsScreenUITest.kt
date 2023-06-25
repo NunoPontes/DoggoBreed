@@ -10,7 +10,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -18,9 +17,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.common.truth.Truth.assertThat
 import com.nunop.doggobreed.MainActivity
 import com.nunop.doggobreed.breedDetails.presentation.BreedDetailsScreen
 import com.nunop.doggobreed.navigation.Route
@@ -28,12 +24,12 @@ import com.nunop.doggobreed.ui.theme.DoggoBreedTheme
 import com.nunop.doggobreed.utils.MockServerDispatcherAndroid
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import junit.framework.TestCase.assertTrue
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
@@ -43,12 +39,8 @@ class AllDogBreedsScreenUITest {
     @get:Rule(order = 1)
     val hiltRule = HiltAndroidRule(this)
 
-//    @get:Rule
-//    val activityScenarioRule = ActivityScenarioRule<MainActivity>()
-
     @get:Rule(order = 2)
-//    val composeRule = createAndroidComposeRule<MainActivity>()
-    val composeRule = createComposeRule()
+    val composeRule = createAndroidComposeRule<MainActivity>()
 
     private lateinit var server: MockWebServer
     private lateinit var navController: NavHostController
@@ -60,8 +52,7 @@ class AllDogBreedsScreenUITest {
 
         hiltRule.inject()
 
-        composeRule.setContent {
-//        composeRule.activity.setContent {
+        composeRule.activity.setContent {
             DoggoBreedTheme {
                 navController = rememberNavController()
                 val scaffoldState = rememberScaffoldState()
@@ -126,21 +117,21 @@ class AllDogBreedsScreenUITest {
         server.shutdown()
     }
 
-    //TODO: wait for a new release which solve the bug: https://issuetracker.google.com/issues/235703118
     @Test
     fun getBreeds_success() {
         server.dispatcher = MockServerDispatcherAndroid().RequestDispatcherSuccess()
 
+        //Only counts visible ones
         composeRule
-//            .onAllNodesWithContentDescription("Breed").assertCountEquals(96)
-            .onAllNodesWithContentDescription("Breed").assertCountEquals(7)
+            .onAllNodesWithContentDescription("Breed").assertCountEquals(8)
 
+        //We could scroll to the bottom to get the full count of the items
 
-        assertThat(
-            navController.currentDestination?.route?.startsWith(Route.DOG_BREEDS)
+        assertTrue(
+            navController.currentDestination?.route?.startsWith(Route.DOG_BREEDS) ?: false
         )
     }
-
+//TODO: Test error, test details, loadings, etc
 //    @Test
 //    fun getBreeds_error() {
 //

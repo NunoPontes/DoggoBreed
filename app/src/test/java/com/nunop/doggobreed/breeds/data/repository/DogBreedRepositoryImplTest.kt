@@ -19,7 +19,6 @@ import retrofit2.Response
 
 
 class DogBreedRepositoryImplTest {
-    //TODO: use mockwebserver, success and error response
 
     private lateinit var repository: DogBreedRepository
     private lateinit var localDataSource: LocalDataSourceBreeds
